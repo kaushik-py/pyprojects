@@ -1,6 +1,9 @@
 import mysql.connector as sql
 from datetime import datetime
 import csv
+'''This project is created by Kaushik Joshi and in this project i have used sql connector for 
+making bank management system to store the database of bank users and for related work'''
+
 facilities ='We are giving the following facilities -:\n\
 Press 1 to open your account\n\
 Press 2 to add  money to your account\n\
@@ -11,7 +14,7 @@ Press 6 to convert your account details into a excel file.\n\
 Press 7 to close your bank account.\n\
 Press 8 to exit.\n\
 '
-def database_handler(psw):
+def database_handler(psw): # This function will check in sql that database named "bank" is there or not, if not so it will create automatically.
     var = False
     try :
         var = True
@@ -39,7 +42,7 @@ def database_handler(psw):
 
 
 
-def current_date():
+def current_date(): # This function will give us date in the format 'Date Month_name Year'
     day = datetime.now().day
     month = datetime.now().month
     year = datetime.now().year
@@ -51,14 +54,14 @@ def current_date():
     formatted_date = f'"{day} {month} {year}"'
     return formatted_date
 
-def current_time():
+def current_time(): 
     hour = datetime.now().hour
     minute = datetime.now().minute
     second = datetime.now().second
     formatted_time = f'"{hour}:{minute}:{second}"'
     return formatted_time
 
-def connect(psw):
+def connect(psw): # This function will connect our program with sql database named "bank"
     global mydb, mycursor
     mydb = sql.connect(user = "root" , host = "localhost" , password = psw , database = "bank" )
     mycursor = mydb.cursor()
@@ -79,7 +82,7 @@ def check_user(user_name,psw):
     return flag
 
 
-def open_account(user_name,psw):
+def open_account(user_name,psw):  # This funtion will create a table for each unique user in bank database in sql
     connect(psw)
     is_user = check_user(user_name,psw)
     if is_user:
@@ -91,7 +94,7 @@ def open_account(user_name,psw):
         mydb.commit()
         return True
 
-def add_money(user_name,money,flag,psw):
+def add_money(user_name,money,flag,psw): # This funtion will add entry in Current_balance column in given username table
     connect(psw)
     query = f'select count(Id) from {user_name} '
     mycursor.execute(query)
@@ -118,7 +121,7 @@ def add_money(user_name,money,flag,psw):
 
     
 
-def minus_money(user_name,money,psw):
+def minus_money(user_name,money,psw):  # This funtion will fetch current banlance from username table and deduct given value from it
     connect(psw)
     query = f'select count(Id) from {user_name} '
     mycursor.execute(query)
@@ -139,7 +142,7 @@ def minus_money(user_name,money,psw):
 
 
 
-def show_details(user_name,psw):
+def show_details(user_name,psw): # This funtion will show us all the details of given username table
     connect(psw)
     user = check_user(user_name,psw)
     if user :
@@ -155,7 +158,7 @@ def show_details(user_name,psw):
     else :
         print(user_name,"does not have account in our bank.............")
 
-def transfer_money(psw):
+def transfer_money(psw): # This function will deduct given value from given username table and will add to another given username table
     connect(psw)
     sender = input("Enter your name-- ")
     sender_check = check_user(sender,psw)
@@ -185,7 +188,7 @@ def transfer_money(psw):
     else:
         print(sender,"does not have account in our bank.......")
 
-def convert_ac_into_excel(psw,user_name):
+def convert_ac_into_excel(psw,user_name): # This funtion will fetch all the details of the given username table and will add this details to the csv file
     connect(psw)
     query = f'select * from {user_name} '
     mycursor.execute(query)
@@ -202,7 +205,7 @@ def convert_ac_into_excel(psw,user_name):
     empwriter.writerows(empdata)
     fh.close() 
        
-def close_account(psw , user_name) :
+def close_account(psw , user_name) : # This funtion will delete the given table from the 'bank' database
     connect(psw)
     query = f'drop table {user_name}'
     mycursor.execute(query)
@@ -273,3 +276,5 @@ try:
         
 except:
     print("There is some error!!!! . Please try again later, we will fix it soon.........")
+    
+# Thanks by - Kaushik Joshi
